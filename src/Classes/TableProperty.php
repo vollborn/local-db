@@ -9,16 +9,20 @@ class TableProperty
     public const TYPE_STRING = 'string';
     public const TYPE_INTEGER = 'integer';
     public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_FLOAT = 'float';
 
     public const AVAILABLE_TYPES = [
         self::TYPE_STRING,
         self::TYPE_INTEGER,
-        self::TYPE_BOOLEAN
+        self::TYPE_BOOLEAN,
+        self::TYPE_FLOAT
     ];
 
     private string $type;
     private string $name;
     private ?int $maxlength;
+    private bool $isNullable = false;
+    private $defaultValue;
 
     /**
      * @param string $type
@@ -39,6 +43,25 @@ class TableProperty
         $this->type = $type;
         $this->name = $name;
         $this->maxlength = $maxlength;
+    }
+
+    /**
+     * @return $this
+     */
+    public function nullable(): TableProperty
+    {
+        $this->isNullable = true;
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function default($value): TableProperty
+    {
+        $this->defaultValue = $value;
+        return $this;
     }
 
     /**
@@ -63,6 +86,22 @@ class TableProperty
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getNullable(): bool
+    {
+        return $this->isNullable;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
     }
 
     /**

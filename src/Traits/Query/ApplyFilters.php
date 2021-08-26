@@ -4,6 +4,7 @@ namespace LocalDB\Traits\Query;
 
 use LocalDB\Classes\TableProperty;
 use LocalDB\Traits\Query\CheckFilters\CheckFilterOnBoolean;
+use LocalDB\Traits\Query\CheckFilters\CheckFilterOnFloat;
 use LocalDB\Traits\Query\CheckFilters\CheckFilterOnInteger;
 use LocalDB\Traits\Query\CheckFilters\CheckFilterOnString;
 
@@ -11,7 +12,8 @@ trait ApplyFilters
 {
     use CheckFilterOnString,
         CheckFilterOnBoolean,
-        CheckFilterOnInteger;
+        CheckFilterOnInteger,
+        CheckFilterOnFloat;
 
     /**
      * @return array
@@ -55,6 +57,8 @@ trait ApplyFilters
                 return $this->checkFilterOnBoolean($rowValue, $filter['operator'], $compareValue);
             case TableProperty::TYPE_INTEGER:
                 return $this->checkFilterOnInteger($rowValue, $filter['operator'], $compareValue);
+            case TableProperty::TYPE_FLOAT:
+                return $this->checkFilterOnFloat($rowValue, $filter['operator'], $compareValue);
         }
         return false;
     }
