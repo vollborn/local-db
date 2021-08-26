@@ -13,13 +13,28 @@ trait GetQueryData
     }
 
     /**
+     * @param int $count
+     * @return array|null
      * @throws \LocalDB\Classes\Exceptions\LocalDBException
      */
-    public function first(): ?array
+    public function first(int $count = 1): ?array
     {
         $rows = $this->getDataAndApplyFilters();
-        return sizeof($rows)
-            ? $rows[0]
-            : null;
+        return empty($rows)
+            ? null
+            : array_slice($rows, 0, $count);
+    }
+
+    /**
+     * @param int $count
+     * @return array|null
+     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public function last(int $count = 1): ?array
+    {
+        $rows = $this->getDataAndApplyFilters();
+        return empty($rows)
+            ? null
+            : array_slice($rows, sizeof($rows) - $count);
     }
 }
