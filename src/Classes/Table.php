@@ -1,49 +1,57 @@
 <?php
 
-namespace LocalDB\Classes;
-
-use Exception;
-use LocalDB\Classes\Exceptions\LocalDBException;
-use LocalDB\Traits\Helpers;
-use LocalDB\Traits\Table\HasTableProperties;
-use LocalDB\Traits\Table\CanAddRows;
+namespace Vollborn\LocalDB\Classes;
 
 class Table
 {
-    use Helpers,
-        HasTableProperties,
-        CanAddRows;
-
-    private string $name;
-    private string $filepath;
+    /**
+     * @var string
+     */
+    protected string $name;
 
     /**
-     * @throws \Exception
+     * @var array
+     */
+    protected array $columns = [];
+
+    /**
+     * @var \Vollborn\LocalDB\Classes\Writer
+     */
+    protected Writer $writer;
+
+    /**
+     * @var bool
+     */
+    protected bool $isReadonly = false;
+
+    /**
+     * @param string $name
      */
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->filepath = $name . '.json';
-
-        if (!self::createJsonFile($this->filepath)) {
-            throw new LocalDBException('File ' . $this->filepath . ' could not be created.');
-        };
-
-        self::addProperty(TableProperty::TYPE_ID, 'id');
+        $this->writer = new Writer($this);
     }
 
     /**
-     * @return array
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     * @param string $name
+     * @param string $type
+     * @return \Vollborn\LocalDB\Classes\Column
      */
-    public function getAllRows(): array
+    public function addColumn(string $name, string $type): Column
     {
-        try {
-            $fileContent = file_get_contents(LocalDB::getPath() . '/' . $this->filepath);
-            return json_decode($fileContent, true, 512, JSON_THROW_ON_ERROR);
-        } catch (Exception $exception) {
-            throw new LocalDBException('Cannot read table ' . $this->name . '.');
-        }
+        $column = new Column($name, $type);
+        $this->columns[] = $column;
+        return $column;
+    }
+
+    /**
+     * @param bool $isReadonly
+     * @return void
+     */
+    public function readonly(bool $isReadonly = true)
+    {
+        $this->isReadonly = $isReadonly;
     }
 
     /**
@@ -55,10 +63,10 @@ class Table
     }
 
     /**
-     * @return string
+     * @return \Vollborn\LocalDB\Classes\Writer
      */
-    public function getFilepath(): string
+    public function getWriter(): Writer
     {
-        return $this->filepath;
+        return $this->writer;
     }
 }
