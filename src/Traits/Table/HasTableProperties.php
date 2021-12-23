@@ -1,6 +1,6 @@
 <?php
 
-namespace LocalDB\Traits;
+namespace LocalDB\Traits\Table;
 
 use LocalDB\Classes\Exceptions\LocalDBException;
 use LocalDB\Classes\TableProperty;

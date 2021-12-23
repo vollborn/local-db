@@ -1,8 +1,9 @@
 <?php
 
-namespace LocalDB\Traits;
+namespace LocalDB\Traits\Base;
 
 use LocalDB\Classes\Table;
+use LocalDB\Traits\Helpers;
 
 trait Initialize
 {
@@ -39,7 +40,7 @@ trait Initialize
     {
         $table = new Table($name);
         call_user_func($callback, $table);
-        self::$tables[] = $table;
+        self::$tables[$name] = $table;
         return $table;
     }
 }

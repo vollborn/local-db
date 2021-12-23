@@ -1,12 +1,12 @@
 <?php
 
-namespace LocalDB\Traits\Query;
+namespace LocalDB\Traits\Query\Filters;
 
 use LocalDB\Classes\TableProperty;
-use LocalDB\Traits\Query\CheckFilters\CheckFilterOnBoolean;
-use LocalDB\Traits\Query\CheckFilters\CheckFilterOnFloat;
-use LocalDB\Traits\Query\CheckFilters\CheckFilterOnInteger;
-use LocalDB\Traits\Query\CheckFilters\CheckFilterOnString;
+use LocalDB\Traits\Query\Filters\CheckFilters\CheckFilterOnBoolean;
+use LocalDB\Traits\Query\Filters\CheckFilters\CheckFilterOnFloat;
+use LocalDB\Traits\Query\Filters\CheckFilters\CheckFilterOnInteger;
+use LocalDB\Traits\Query\Filters\CheckFilters\CheckFilterOnString;
 
 trait ApplyFilters
 {

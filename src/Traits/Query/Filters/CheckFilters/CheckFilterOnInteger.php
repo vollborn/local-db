@@ -1,16 +1,16 @@
 <?php
 
-namespace LocalDB\Traits\Query\CheckFilters;
+namespace LocalDB\Traits\Query\Filters\CheckFilters;
 
-trait CheckFilterOnFloat
+trait CheckFilterOnInteger
 {
     /**
-     * @param float $value
+     * @param int $value
      * @param string $operator
-     * @param float $compareValue
+     * @param int $compareValue
      * @return bool
      */
-    private function checkFilterOnFloat(float $value, string $operator, float $compareValue): bool
+    private function checkFilterOnInteger(int $value, string $operator, int $compareValue): bool
     {
         switch ($operator) {
             case '=':

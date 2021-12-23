@@ -2,13 +2,15 @@
 
 namespace LocalDB\Classes;
 
+use LocalDB\Traits\Query\CanUpdate;
 use LocalDB\Traits\Query\GetQueryData;
-use LocalDB\Traits\Query\HasFilters;
+use LocalDB\Traits\Query\Filters\HasFilters;
 
 class Query
 {
     use HasFilters,
-        GetQueryData;
+        GetQueryData,
+        CanUpdate;
 
     private Table $table;
 

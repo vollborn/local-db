@@ -5,12 +5,14 @@ namespace LocalDB\Classes;
 use Exception;
 use LocalDB\Classes\Exceptions\LocalDBException;
 use LocalDB\Traits\Helpers;
-use LocalDB\Traits\HasTableProperties;
+use LocalDB\Traits\Table\HasTableProperties;
+use LocalDB\Traits\Table\CanAddRows;
 
 class Table
 {
     use Helpers,
-        HasTableProperties;
+        HasTableProperties,
+        CanAddRows;
 
     private string $name;
     private string $filepath;
@@ -26,6 +28,8 @@ class Table
         if (!self::createJsonFile($this->filepath)) {
             throw new LocalDBException('File ' . $this->filepath . ' could not be created.');
         };
+
+        self::addProperty(TableProperty::TYPE_ID, 'id');
     }
 
     /**

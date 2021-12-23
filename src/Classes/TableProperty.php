@@ -6,12 +6,14 @@ use LocalDB\Classes\Exceptions\LocalDBException;
 
 class TableProperty
 {
+    public const TYPE_ID = 'id';
     public const TYPE_STRING = 'string';
     public const TYPE_INTEGER = 'integer';
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_FLOAT = 'float';
 
     public const AVAILABLE_TYPES = [
+        self::TYPE_ID,
         self::TYPE_STRING,
         self::TYPE_INTEGER,
         self::TYPE_BOOLEAN,

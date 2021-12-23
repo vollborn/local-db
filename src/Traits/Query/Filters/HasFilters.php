@@ -1,6 +1,6 @@
 <?php
 
-namespace LocalDB\Traits\Query;
+namespace LocalDB\Traits\Query\Filters;
 
 use LocalDB\Classes\Exceptions\LocalDBException;
 use LocalDB\Classes\Query;

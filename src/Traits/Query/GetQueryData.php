@@ -2,39 +2,64 @@
 
 namespace LocalDB\Traits\Query;
 
+use LocalDB\Classes\Model;
+
 trait GetQueryData
 {
     /**
      * @throws \LocalDB\Classes\Exceptions\LocalDBException
      */
-    public function get(): array
+    public function get()
     {
-        return $this->getDataAndApplyFilters();
+        $rows = $this->getDataAndApplyFilters();
+        return $this->mapRowsToModel($rows);
     }
 
     /**
-     * @param int $count
      * @return array|null
      * @throws \LocalDB\Classes\Exceptions\LocalDBException
      */
-    public function first(int $count = 1): ?array
+    public function first(): ?Model
     {
         $rows = $this->getDataAndApplyFilters();
-        return empty($rows)
+        $mappedRows = $this->mapRowsToModel($rows);
+        return empty($mappedRows)
             ? null
-            : array_slice($rows, 0, $count);
+            : $mappedRows[0];
     }
 
     /**
-     * @param int $count
      * @return array|null
      * @throws \LocalDB\Classes\Exceptions\LocalDBException
      */
-    public function last(int $count = 1): ?array
+    public function last(): ?Model
     {
         $rows = $this->getDataAndApplyFilters();
-        return empty($rows)
+        $mappedRows = $this->mapRowsToModel($rows);
+        return empty($mappedRows)
             ? null
-            : array_slice($rows, sizeof($rows) - $count);
+            : $mappedRows[sizeof($mappedRows) - 1];
+    }
+
+    /**
+     * @param array $rows
+     * @return mixed
+     */
+    private function mapRowsToModel(array $rows)
+    {
+        $mappedRows = [];
+
+        foreach ($rows as $row) {
+            $model = new Model($this->table);
+            $model->forceFill($row);
+            $mappedRows[] = $model;
+        }
+
+        // Laravel specific
+        if (class_exists('\Illuminate\Support\Collection')) {
+            return new \Illuminate\Support\Collection($mappedRows);
+        }
+
+        return $mappedRows;
     }
 }
