@@ -36,6 +36,7 @@ class LocalDB
     /**
      * @param string $name
      * @return \Vollborn\LocalDB\Classes\Table
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
     public static function table(string $name): Table
     {
