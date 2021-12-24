@@ -22,11 +22,6 @@ class Query
     /**
      * @var array
      */
-    protected array $search = [];
-
-    /**
-     * @var array
-     */
     protected array $attributes = [];
 
     /**

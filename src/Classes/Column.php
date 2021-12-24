@@ -4,6 +4,11 @@ namespace Vollborn\LocalDB\Classes;
 
 class Column
 {
+    public const TYPE_STRING = 'string';
+    public const TYPE_INT = 'int';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_BOOLEAN = 'boolean';
+
     /**
      * @var string
      */

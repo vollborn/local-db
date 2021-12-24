@@ -35,13 +35,19 @@ class LocalDB
 
     /**
      * @param string $name
+     * @param mixed|null $callback
      * @return \Vollborn\LocalDB\Classes\Table
      * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
-    public static function table(string $name): Table
+    public static function table(string $name, $callback = null): Table
     {
         $table = new Table($name);
         self::$tables[] = $table;
+
+        if ($callback) {
+            call_user_func($callback, $table);
+        }
+
         return $table;
     }
 

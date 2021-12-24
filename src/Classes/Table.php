@@ -2,17 +2,16 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Traits\Table\HasColumns;
+
 class Table
 {
+    use HasColumns;
+
     /**
      * @var string
      */
     protected string $name;
-
-    /**
-     * @var array
-     */
-    protected array $columns = [];
 
     /**
      * @var \Vollborn\LocalDB\Classes\Writer
@@ -32,18 +31,6 @@ class Table
     {
         $this->name = $name;
         $this->writer = new Writer($this);
-    }
-
-    /**
-     * @param string $name
-     * @param string $type
-     * @return \Vollborn\LocalDB\Classes\Column
-     */
-    public function addColumn(string $name, string $type): Column
-    {
-        $column = new Column($name, $type);
-        $this->columns[] = $column;
-        return $column;
     }
 
     /**
@@ -69,13 +56,5 @@ class Table
     public function getWriter(): Writer
     {
         return $this->writer;
-    }
-
-    /**
-     * @return array
-     */
-    public function getColumns(): array
-    {
-        return $this->columns;
     }
 }
