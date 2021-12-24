@@ -2,9 +2,7 @@
 
 namespace Vollborn\LocalDB\Classes\Executors;
 
-use Vollborn\LocalDB\Classes\Exceptions\LocalDBException;
 use Vollborn\LocalDB\Classes\Query;
-use Vollborn\LocalDB\Classes\Validator;
 
 abstract class BaseExecutor
 {
@@ -58,19 +56,6 @@ abstract class BaseExecutor
         }
 
         return $this->cleanupArrayKeys($data);
-    }
-
-    /**
-     * @param array $attributes
-     * @return void
-     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
-     */
-    protected function validateAttributes(array $attributes)
-    {
-        $columns = $this->query->getTable()->getColumns();
-        if (!Validator::columns($columns, $attributes)) {
-            throw new LocalDBException();
-        }
     }
 
     /**

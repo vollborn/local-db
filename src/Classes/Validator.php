@@ -15,9 +15,8 @@ class Validator
      * @param array $attributes
      * @return bool
      */
-    public static function columns(array $columns, array $attributes): bool
+    public static function hasRequiredColumns(array $columns, array $attributes): bool
     {
-        // check if required columns are specified
         foreach ($columns as $column) {
             $name = $column->getName();
             $isRequired = !$column->getNullable() || !$column->getAutoincrements();
@@ -26,7 +25,16 @@ class Validator
             }
         }
 
-        // check if attribute values itself are valid
+        return true;
+    }
+
+    /**
+     * @param array $columns
+     * @param array $attributes
+     * @return bool
+     */
+    public static function columns(array $columns, array $attributes): bool
+    {
         foreach ($attributes as $attributeName => $attributeValue) {
             $usedColumn = null;
 
