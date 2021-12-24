@@ -20,6 +20,11 @@ class Column
     protected bool $isNullable = false;
 
     /**
+     * @var bool
+     */
+    protected bool $hasAutoincrements = false;
+
+    /**
      * @param string $name
      * @param string $type
      */
@@ -36,5 +41,46 @@ class Column
     public function nullable(bool $isNullable = true)
     {
         $this->isNullable = $isNullable;
+    }
+
+    /**
+     * @param bool $hasAutoincrements
+     * @return void
+     */
+    public function autoincrements(bool $hasAutoincrements = true)
+    {
+        $this->hasAutoincrements = $hasAutoincrements;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getNullable(): bool
+    {
+        return $this->isNullable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAutoincrements(): bool
+    {
+        return $this->hasAutoincrements;
     }
 }

@@ -20,6 +20,16 @@ class Query
     protected array $filters = [];
 
     /**
+     * @var array
+     */
+    protected array $search = [];
+
+    /**
+     * @var array
+     */
+    protected array $attributes = [];
+
+    /**
      * @var string
      */
     protected string $action;
@@ -64,6 +74,37 @@ class Query
     }
 
     /**
+     * @param array $attributes
+     * @return array
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public function create(array $attributes): array
+    {
+        $this->attributes = $attributes;
+        return $this->executor->execute(Executor::ACTION_CREATE);
+    }
+
+    /**
+     * @param array $attributes
+     * @return array|null
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public function update(array $attributes): ?array
+    {
+        $this->attributes = $attributes;
+        return $this->executor->execute(Executor::ACTION_UPDATE);
+    }
+
+    /**
+     * @return array
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public function delete(): array
+    {
+        return $this->executor->execute(Executor::ACTION_DELETE);
+    }
+
+    /**
      * @return \Vollborn\LocalDB\Classes\Table
      */
     public function getTable(): Table
@@ -77,5 +118,13 @@ class Query
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 }

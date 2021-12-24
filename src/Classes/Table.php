@@ -26,6 +26,7 @@ class Table
 
     /**
      * @param string $name
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
     public function __construct(string $name)
     {
@@ -68,5 +69,13 @@ class Table
     public function getWriter(): Writer
     {
         return $this->writer;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
     }
 }

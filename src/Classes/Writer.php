@@ -48,17 +48,29 @@ class Writer
             throw new LocalDBException();
         }
 
-        return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        $rows = [];
+
+        foreach ($data as $item) {
+            $rows[] = new Row($item);
+        }
+
+        return $rows;
     }
 
     /**
-     * @param array $data
+     * @param array $rows
      * @return array
      * @throws \Exception
      */
-    public function write(array $data): array
+    public function write(array $rows): array
     {
-        $json = json_encode($data, JSON_THROW_ON_ERROR);
+        $data = [];
+        foreach ($rows as $row) {
+            $data[] = $row->getAttributes();
+        }
+
+        $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 
         if (!file_put_contents($this->path, $json)) {
             throw new LocalDBException();
