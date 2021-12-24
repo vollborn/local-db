@@ -8,6 +8,7 @@ class Column
     public const TYPE_INT = 'int';
     public const TYPE_FLOAT = 'float';
     public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_ARRAY = 'array';
 
     /**
      * @var string

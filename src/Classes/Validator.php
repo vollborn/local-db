@@ -2,6 +2,12 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Classes\Validators\ArrayValidator;
+use Vollborn\LocalDB\Classes\Validators\BooleanValidator;
+use Vollborn\LocalDB\Classes\Validators\FloatValidator;
+use Vollborn\LocalDB\Classes\Validators\IntValidator;
+use Vollborn\LocalDB\Classes\Validators\StringValidator;
+
 class Validator
 {
     /**
@@ -49,6 +55,19 @@ class Validator
      */
     public static function column(Column $column, $value): bool
     {
-        return true;
+        switch ($column->getType()) {
+            case Column::TYPE_STRING:
+                return StringValidator::call($column, $value);
+            case Column::TYPE_INT:
+                return IntValidator::call($column, $value);
+            case Column::TYPE_BOOLEAN:
+                return BooleanValidator::call($column, $value);
+            case Column::TYPE_FLOAT:
+                return FloatValidator::call($column, $value);
+            case Column::TYPE_ARRAY:
+                return ArrayValidator::call($column, $value);
+        }
+
+        return false;
     }
 }

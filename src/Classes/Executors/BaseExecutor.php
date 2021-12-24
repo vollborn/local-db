@@ -57,7 +57,7 @@ abstract class BaseExecutor
             }
         }
 
-        return $data;
+        return $this->cleanupArrayKeys($data);
     }
 
     /**
@@ -71,5 +71,18 @@ abstract class BaseExecutor
         if (!Validator::columns($columns, $attributes)) {
             throw new LocalDBException();
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function cleanupArrayKeys(array $data): array
+    {
+        $cleaned = [];
+        foreach ($data as $item) {
+            $cleaned[] = $item;
+        }
+        return $cleaned;
     }
 }

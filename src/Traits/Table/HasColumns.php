@@ -35,6 +35,15 @@ trait HasColumns
      * @param string $name
      * @return \Vollborn\LocalDB\Classes\Column
      */
+    public function array(string $name): Column
+    {
+        return $this->addColumn($name, Column::TYPE_ARRAY);
+    }
+
+    /**
+     * @param string $name
+     * @return \Vollborn\LocalDB\Classes\Column
+     */
     public function int(string $name): Column
     {
         return $this->addColumn($name, Column::TYPE_INT);
