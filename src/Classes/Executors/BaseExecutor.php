@@ -4,24 +4,12 @@ namespace Vollborn\LocalDB\Classes\Executors;
 
 use Vollborn\LocalDB\Classes\Query;
 
-abstract class BaseExecutor
+class BaseExecutor
 {
     /**
      * @var \Vollborn\LocalDB\Classes\Query
      */
     protected Query $query;
-
-    /**
-     * @param \Vollborn\LocalDB\Classes\Query $query
-     * @return mixed
-     */
-    public static function call(Query $query)
-    {
-        $called = get_called_class();
-        return (new $called($query))->execute();
-    }
-
-    public abstract function execute();
 
     /**
      * @param \Vollborn\LocalDB\Classes\Query $query

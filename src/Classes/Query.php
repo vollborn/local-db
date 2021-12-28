@@ -2,17 +2,20 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Classes\Executors\CreateExecutor;
+use Vollborn\LocalDB\Classes\Executors\DeleteExecutor;
+use Vollborn\LocalDB\Classes\Executors\FirstExecutor;
+use Vollborn\LocalDB\Classes\Executors\GetExecutor;
+use Vollborn\LocalDB\Classes\Executors\MaxExecutor;
+use Vollborn\LocalDB\Classes\Executors\MinExecutor;
+use Vollborn\LocalDB\Classes\Executors\UpdateExecutor;
+
 class Query
 {
     /**
      * @var \Vollborn\LocalDB\Classes\Table
      */
     protected Table $table;
-
-    /**
-     * @var \Vollborn\LocalDB\Classes\Executor
-     */
-    protected Executor $executor;
 
     /**
      * @var array
@@ -35,7 +38,6 @@ class Query
     public function __construct(Table $table)
     {
         $this->table = $table;
-        $this->executor = new Executor($this);
     }
 
     /**
@@ -56,16 +58,18 @@ class Query
      */
     public function get(): array
     {
-        return $this->executor->execute(Executor::ACTION_GET);
+        $executor = new GetExecutor($this);
+        return $executor->execute();
     }
 
     /**
      * @return array|null
-     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     * @throws \Exception
      */
     public function first(): ?array
     {
-        return $this->executor->execute(Executor::ACTION_FIRST);
+        $executor = new FirstExecutor($this);
+        return $executor->execute();
     }
 
     /**
@@ -76,27 +80,54 @@ class Query
     public function create(array $attributes): array
     {
         $this->attributes = $attributes;
-        return $this->executor->execute(Executor::ACTION_CREATE);
+
+        $executor = new CreateExecutor($this);
+        return $executor->execute();
     }
 
     /**
      * @param array $attributes
      * @return array|null
-     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     * @throws \Exception
      */
     public function update(array $attributes): ?array
     {
         $this->attributes = $attributes;
-        return $this->executor->execute(Executor::ACTION_UPDATE);
+
+        $executor = new UpdateExecutor($this);
+        return $executor->execute();
     }
 
     /**
      * @return array
-     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     * @throws \Exception
      */
     public function delete(): array
     {
-        return $this->executor->execute(Executor::ACTION_DELETE);
+        $executor = new DeleteExecutor($this);
+        return $executor->execute();
+    }
+
+    /**
+     * @param string $attribute
+     * @return array|null
+     * @throws \Exception
+     */
+    public function max(string $attribute): ?array
+    {
+        $executor = new MaxExecutor($this);
+        return $executor->execute($attribute);
+    }
+
+    /**
+     * @param string $attribute
+     * @return array|null
+     * @throws \Exception
+     */
+    public function min(string $attribute): ?array
+    {
+        $executor = new MinExecutor($this);
+        return $executor->execute($attribute);
     }
 
     /**
