@@ -40,6 +40,30 @@ class BaseExecutor
                         return $array[$filter[0]] !== $filter[2];
                     });
                     break;
+                case "<":
+                    $data = array_filter($data, static function ($item) use ($filter) {
+                        $array = $item->getAttributes();
+                        return $array[$filter[0]] < $filter[2];
+                    });
+                    break;
+                case ">":
+                    $data = array_filter($data, static function ($item) use ($filter) {
+                        $array = $item->getAttributes();
+                        return $array[$filter[0]] > $filter[2];
+                    });
+                    break;
+                case "<=":
+                    $data = array_filter($data, static function ($item) use ($filter) {
+                        $array = $item->getAttributes();
+                        return $array[$filter[0]] <= $filter[2];
+                    });
+                    break;
+                case ">=":
+                    $data = array_filter($data, static function ($item) use ($filter) {
+                        $array = $item->getAttributes();
+                        return $array[$filter[0]] >= $filter[2];
+                    });
+                    break;
             }
         }
 

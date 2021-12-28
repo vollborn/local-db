@@ -2,6 +2,7 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Classes\Executors\AvgExecutor;
 use Vollborn\LocalDB\Classes\Executors\CreateExecutor;
 use Vollborn\LocalDB\Classes\Executors\DeleteExecutor;
 use Vollborn\LocalDB\Classes\Executors\FirstExecutor;
@@ -110,10 +111,10 @@ class Query
 
     /**
      * @param string $attribute
-     * @return array|null
+     * @return mixed
      * @throws \Exception
      */
-    public function max(string $attribute): ?array
+    public function max(string $attribute)
     {
         $executor = new MaxExecutor($this);
         return $executor->execute($attribute);
@@ -121,12 +122,23 @@ class Query
 
     /**
      * @param string $attribute
-     * @return array|null
+     * @return mixed
      * @throws \Exception
      */
-    public function min(string $attribute): ?array
+    public function min(string $attribute)
     {
         $executor = new MinExecutor($this);
+        return $executor->execute($attribute);
+    }
+
+    /**
+     * @param string $attribute
+     * @return mixed
+     * @throws \Exception
+     */
+    public function avg(string $attribute)
+    {
+        $executor = new AvgExecutor($this);
         return $executor->execute($attribute);
     }
 

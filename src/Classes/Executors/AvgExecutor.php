@@ -2,33 +2,28 @@
 
 namespace Vollborn\LocalDB\Classes\Executors;
 
-class MaxExecutor extends BaseExecutor
+class AvgExecutor extends BaseExecutor
 {
     /**
      * @param string $attribute
      * @return mixed
      * @throws \Exception
+     * @noinspection PhpReturnDocTypeMismatchInspection
      */
     public function execute(string $attribute)
     {
         $data = $this->query->getTable()->getWriter()->read();
         $data = $this->applyFilters($data);
 
-        $max = null;
+        $avg = 0;
+        $count = 0;
+
         foreach ($data as $row) {
+            $count++;
             $attributes = $row->getAttributes();
-            $val = $attributes[$attribute];
-
-            if ($max === null) {
-                $max = $val;
-                continue;
-            }
-
-            if ($val > $max) {
-                $max = $val;
-            }
+            $avg += $attributes[$attribute];
         }
 
-        return $max;
+        return $count === 0 ? null : $avg / $count;
     }
 }

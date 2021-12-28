@@ -2,31 +2,33 @@
 
 namespace Vollborn\LocalDB\Classes\Executors;
 
-use Vollborn\LocalDB\Classes\Row;
-
 class MinExecutor extends BaseExecutor
 {
     /**
      * @param string $attribute
-     * @return array
+     * @return mixed
      * @throws \Exception
      */
-    public function execute(string $attribute): array
+    public function execute(string $attribute)
     {
         $data = $this->query->getTable()->getWriter()->read();
         $data = $this->applyFilters($data);
 
-        /** @var Row $row */
-        $row = array_reduce($data, static function ($carry, $item) use ($attribute) {
-            if (!$carry) {
-                return $item;
+        $min = null;
+        foreach ($data as $row) {
+            $attributes = $row->getAttributes();
+            $val = $attributes[$attribute];
+
+            if ($min === null) {
+                $min = $val;
+                continue;
             }
 
-            $carryAttributes = $carry->getAttributes();
-            $itemAttributes = $item->getAttributes();
-            return $carryAttributes[$attribute] < $itemAttributes[$attribute] ? $carry : $item;
-        });
+            if ($val < $min) {
+                $min = $val;
+            }
+        }
 
-        return $row->getAttributes();
+        return $min;
     }
 }
