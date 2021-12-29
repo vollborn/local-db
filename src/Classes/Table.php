@@ -1,49 +1,45 @@
 <?php
 
-namespace LocalDB\Classes;
+namespace Vollborn\LocalDB\Classes;
 
-use Exception;
-use LocalDB\Classes\Exceptions\LocalDBException;
-use LocalDB\Traits\Helpers;
-use LocalDB\Traits\Table\HasTableProperties;
-use LocalDB\Traits\Table\CanAddRows;
+use Vollborn\LocalDB\Traits\Table\HasColumns;
 
 class Table
 {
-    use Helpers,
-        HasTableProperties,
-        CanAddRows;
-
-    private string $name;
-    private string $filepath;
+    use HasColumns;
 
     /**
-     * @throws \Exception
+     * @var string
+     */
+    protected string $name;
+
+    /**
+     * @var \Vollborn\LocalDB\Classes\Writer
+     */
+    protected Writer $writer;
+
+    /**
+     * @var bool
+     */
+    protected bool $isReadonly = false;
+
+    /**
+     * @param string $name
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->filepath = $name . '.json';
-
-        if (!self::createJsonFile($this->filepath)) {
-            throw new LocalDBException('File ' . $this->filepath . ' could not be created.');
-        };
-
-        self::addProperty(TableProperty::TYPE_ID, 'id');
+        $this->writer = new Writer($this);
     }
 
     /**
-     * @return array
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     * @param bool $isReadonly
+     * @return void
      */
-    public function getAllRows(): array
+    public function readonly(bool $isReadonly = true)
     {
-        try {
-            $fileContent = file_get_contents(LocalDB::getPath() . '/' . $this->filepath);
-            return json_decode($fileContent, true, 512, JSON_THROW_ON_ERROR);
-        } catch (Exception $exception) {
-            throw new LocalDBException('Cannot read table ' . $this->name . '.');
-        }
+        $this->isReadonly = $isReadonly;
     }
 
     /**
@@ -55,10 +51,10 @@ class Table
     }
 
     /**
-     * @return string
+     * @return \Vollborn\LocalDB\Classes\Writer
      */
-    public function getFilepath(): string
+    public function getWriter(): Writer
     {
-        return $this->filepath;
+        return $this->writer;
     }
 }

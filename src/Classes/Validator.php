@@ -1,82 +1,81 @@
 <?php
 
-namespace LocalDB\Classes;
+namespace Vollborn\LocalDB\Classes;
 
-use LocalDB\Classes\Exceptions\LocalDBException;
+use Vollborn\LocalDB\Classes\Validators\ArrayValidator;
+use Vollborn\LocalDB\Classes\Validators\BooleanValidator;
+use Vollborn\LocalDB\Classes\Validators\FloatValidator;
+use Vollborn\LocalDB\Classes\Validators\IntValidator;
+use Vollborn\LocalDB\Classes\Validators\StringValidator;
 
 class Validator
 {
     /**
-     * @param \LocalDB\Classes\Table $table
-     * @param array $row
-     * @return array
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     * @param array $columns
+     * @param array $attributes
+     * @return bool
      */
-    public static function validateTableRow(Table $table, array $row): array
+    public static function hasRequiredColumns(array $columns, array $attributes): bool
     {
-        $properties = $table->getProperties();
-        $sanitized = [];
-        foreach ($properties as $propertyName => $property) {
-            $sanitized[$propertyName] = self::sanitize($property, $row);
+        foreach ($columns as $column) {
+            $name = $column->getName();
+            $isRequired = !$column->getNullable() && !$column->getAutoincrements();
+            if ($isRequired && !isset($attributes[$name])) {
+                return false;
+            }
         }
-        return $sanitized;
+
+        return true;
     }
 
     /**
-     * @param \LocalDB\Classes\Table $table
-     * @param array $row
-     * @return array
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     * @param array $columns
+     * @param array $attributes
+     * @return bool
      */
-    public static function sanitizeTableRow(Table $table, array $row): array
+    public static function columns(array $columns, array $attributes): bool
     {
-        $properties = $table->getProperties();
-        $sanitized = [];
-        foreach ($properties as $propertyName => $property) {
-            $sanitized[$propertyName] = self::sanitize($property, $row);
-        }
-        return $sanitized;
-    }
+        foreach ($attributes as $attributeName => $attributeValue) {
+            $usedColumn = null;
 
-    /**
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
-     */
-    private static function sanitize(TableProperty $property, array $row)
-    {
-        $propertyName = $property->getName();
-        $propertyType = $property->getType();
-
-        if ($propertyType === TableProperty::TYPE_ID) {
-            return null;
-        }
-
-        if (!array_key_exists($propertyName, $row) || $row[$propertyName] === null) {
-            if ($property->getNullable()) {
-                return null;
-            }
-
-            if ($property->getDefaultValue()) {
-                return $property->getDefaultValue();
-            }
-
-            throw new LocalDBException('Property ' . $propertyName . ' is not nullable.');
-        }
-
-        switch ($propertyType) {
-            case TableProperty::TYPE_INTEGER:
-                $value = (int)$row[$propertyName];
-                if ($value > $property->getMaxlength()) {
-                    throw new LocalDBException('Property ' . $propertyName . ' is too big.');
+            foreach ($columns as $column) {
+                if ($column->getName() === $attributeName) {
+                    $usedColumn = $column;
+                    break;
                 }
-                return $value;
-            case TableProperty::TYPE_STRING:
-                return (string)$row[$propertyName];
-            case TableProperty::TYPE_FLOAT:
-                return (float)$row[$propertyName];
-            case TableProperty::TYPE_BOOLEAN:
-                return (bool)$row[$propertyName];
+            }
+
+            if (
+                !$usedColumn
+                || !self::column($usedColumn, $attributeValue)
+            ) {
+                return false;
+            }
         }
 
-        throw new LocalDBException('Unsupported type: ' . $property->getType());
+        return true;
+    }
+
+    /**
+     * @param \Vollborn\LocalDB\Classes\Column $column
+     * @param $value
+     * @return bool
+     */
+    public static function column(Column $column, $value): bool
+    {
+        switch ($column->getType()) {
+            case Column::TYPE_STRING:
+                return StringValidator::call($column, $value);
+            case Column::TYPE_INT:
+                return IntValidator::call($column, $value);
+            case Column::TYPE_BOOLEAN:
+                return BooleanValidator::call($column, $value);
+            case Column::TYPE_FLOAT:
+                return FloatValidator::call($column, $value);
+            case Column::TYPE_ARRAY:
+                return ArrayValidator::call($column, $value);
+        }
+
+        return false;
     }
 }
