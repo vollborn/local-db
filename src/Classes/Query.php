@@ -9,6 +9,7 @@ use Vollborn\LocalDB\Classes\Executors\FirstExecutor;
 use Vollborn\LocalDB\Classes\Executors\GetExecutor;
 use Vollborn\LocalDB\Classes\Executors\MaxExecutor;
 use Vollborn\LocalDB\Classes\Executors\MinExecutor;
+use Vollborn\LocalDB\Classes\Executors\SumExecutor;
 use Vollborn\LocalDB\Classes\Executors\UpdateExecutor;
 
 class Query
@@ -139,6 +140,17 @@ class Query
     public function avg(string $attribute)
     {
         $executor = new AvgExecutor($this);
+        return $executor->execute($attribute);
+    }
+
+    /**
+     * @param string $attribute
+     * @return mixed
+     * @throws \Exception
+     */
+    public function sum(string $attribute)
+    {
+        $executor = new SumExecutor($this);
         return $executor->execute($attribute);
     }
 
