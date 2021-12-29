@@ -42,7 +42,7 @@ class LocalDB
     public static function table(string $name, $callback = null): Table
     {
         $table = new Table($name);
-        self::$tables[] = $table;
+        self::$tables[$name] = $table;
 
         if ($callback) {
             call_user_func($callback, $table);
@@ -58,19 +58,10 @@ class LocalDB
      */
     public static function query(string $tableName): Query
     {
-        $usedTable = null;
-
-        foreach (self::$tables as $table) {
-            if ($table->getName() === $tableName) {
-                $usedTable = $table;
-                break;
-            }
+        if (!array_key_exists($tableName, self::$tables)) {
+            throw new LocalDBException("Table not found: $tableName");
         }
 
-        if (!$usedTable) {
-            throw new LocalDBException();
-        }
-
-        return new Query($usedTable);
+        return new Query(self::$tables[$tableName]);
     }
 }

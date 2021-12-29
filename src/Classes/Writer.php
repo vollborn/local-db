@@ -45,7 +45,7 @@ class Writer
         $content = file_get_contents($this->path);
 
         if (!$content) {
-            throw new LocalDBException();
+            throw new LocalDBException("Could not read file: $this->path");
         }
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
@@ -73,7 +73,7 @@ class Writer
         $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 
         if (!file_put_contents($this->path, $json)) {
-            throw new LocalDBException();
+            throw new LocalDBException("Could not write file: $this->path");
         }
 
         return $data;
@@ -91,7 +91,7 @@ class Writer
         }
 
         if (!mkdir($directory, 0777, true)) {
-            throw new LocalDBException();
+            throw new LocalDBException("Could not create directory: $directory");
         }
     }
 }

@@ -23,7 +23,7 @@ class CreateExecutor extends BaseExecutor
             !Validator::hasRequiredColumns($columns, $attributes)
             || !Validator::columns($columns, $attributes)
         ) {
-            throw new LocalDBException();
+            throw new LocalDBException("Create validation failed. Attributes: " . json_encode($attributes));
         }
 
         $writer = $this->query->getTable()->getWriter();
