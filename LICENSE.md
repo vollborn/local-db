@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020 b4sic-org
+Copyright (c) 2020 Oliver Vollborn
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
