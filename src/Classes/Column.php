@@ -2,6 +2,8 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Classes\Exceptions\LocalDBException;
+
 class Column
 {
     public const TYPE_STRING = 'string';
@@ -52,9 +54,14 @@ class Column
     /**
      * @param bool $hasAutoincrements
      * @return void
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
     public function autoincrements(bool $hasAutoincrements = true)
     {
+        if ($hasAutoincrements && $this->type !== static::TYPE_INT) {
+            throw new LocalDBException('The column "' . $this->name . '" cannot have autoincrements.');
+        }
+
         $this->hasAutoincrements = $hasAutoincrements;
     }
 

@@ -19,7 +19,7 @@ class Validator
     {
         foreach ($columns as $column) {
             $name = $column->getName();
-            $isRequired = !$column->getNullable() || !$column->getAutoincrements();
+            $isRequired = !$column->getNullable() && !$column->getAutoincrements();
             if ($isRequired && !isset($attributes[$name])) {
                 return false;
             }
