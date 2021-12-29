@@ -40,11 +40,6 @@ class Query
     protected bool $orderByDesc = false;
 
     /**
-     * @var string
-     */
-    protected string $action;
-
-    /**
      * @param \Vollborn\LocalDB\Classes\Table $table
      */
     public function __construct(Table $table)
