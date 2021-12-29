@@ -1,40 +1,67 @@
 <?php
 
-namespace LocalDB\Classes;
+namespace Vollborn\LocalDB\Classes;
 
-use LocalDB\Classes\Exceptions\LocalDBException;
-use LocalDB\Traits\Initialize;
+use Vollborn\LocalDB\Classes\Exceptions\LocalDBException;
 
 class LocalDB
 {
-    use Initialize;
+    /**
+     * @var string
+     */
+    protected static string $basePath = '../storage/local-db';
 
     /**
-     * @param string $table
-     * @return \LocalDB\Classes\Query
-     * @throws \LocalDB\Classes\Exceptions\LocalDBException
+     * @var array
      */
-    public static function query(string $table): Query
-    {
-        $tableClass = self::findTable($table);
-        if (!$tableClass) {
-            throw new LocalDBException('Table not found.');
-        }
+    protected static array $tables = [];
 
-        return new Query($tableClass);
+    /**
+     * @param string $basePath
+     * @return void
+     */
+    public static function setBasePath(string $basePath)
+    {
+        self::$basePath = $basePath;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getBasePath(): string
+    {
+        return self::$basePath;
     }
 
     /**
      * @param string $name
-     * @return \LocalDB\Classes\Table|null
+     * @param mixed|null $callback
+     * @return \Vollborn\LocalDB\Classes\Table
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
      */
-    private static function findTable(string $name): ?Table
+    public static function table(string $name, $callback = null): Table
     {
-        foreach (self::$tables as $table) {
-            if ($table->getName() === $name) {
-                return $table;
-            }
+        $table = new Table($name);
+        self::$tables[$name] = $table;
+
+        if ($callback) {
+            call_user_func($callback, $table);
         }
-        return null;
+
+        return $table;
+    }
+
+    /**
+     * @param string $tableName
+     * @return \Vollborn\LocalDB\Classes\Query
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public static function query(string $tableName): Query
+    {
+        if (!array_key_exists($tableName, self::$tables)) {
+            throw new LocalDBException("Table not found: $tableName");
+        }
+
+        return new Query(self::$tables[$tableName]);
     }
 }
