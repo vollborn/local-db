@@ -15,8 +15,8 @@ class UpdateExecutor extends BaseExecutor
     public function execute(): array
     {
         $attributes = $this->query->getAttributes();
-
         $columns = $this->query->getTable()->getColumns();
+
         if (!Validator::columns($columns, $attributes)) {
             throw new LocalDBException("Update validation failed. Attributes: " . json_encode($attributes));
         }

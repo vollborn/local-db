@@ -17,8 +17,7 @@ class SumExecutor extends BaseExecutor
         $sum = 0;
 
         foreach ($data as $row) {
-            $attributes = $row->getAttributes();
-            $sum += $attributes[$attribute];
+            $sum += $row->getAttribute($attribute);
         }
 
         return $sum;

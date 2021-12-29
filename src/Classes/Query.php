@@ -30,6 +30,16 @@ class Query
     protected array $attributes = [];
 
     /**
+     * @var string|null
+     */
+    protected ?string $orderByColumn = null;
+
+    /**
+     * @var bool
+     */
+    protected bool $orderByDesc = false;
+
+    /**
      * @var string
      */
     protected string $action;
@@ -51,6 +61,18 @@ class Query
     public function where(string $column, string $operator, $value): self
     {
         $this->filters[] = [$column, $operator, $value];
+        return $this;
+    }
+
+    /**
+     * @param string $columnName
+     * @param bool $orderByDesc
+     * @return $this
+     */
+    public function orderBy(string $columnName, bool $orderByDesc = false): self
+    {
+        $this->orderByColumn = $columnName;
+        $this->orderByDesc = $orderByDesc;
         return $this;
     }
 
@@ -176,5 +198,21 @@ class Query
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderByColumn(): ?string
+    {
+        return $this->orderByColumn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getOrderByDesc(): bool
+    {
+        return $this->orderByDesc;
     }
 }

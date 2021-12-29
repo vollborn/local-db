@@ -16,8 +16,7 @@ class MinExecutor extends BaseExecutor
 
         $min = null;
         foreach ($data as $row) {
-            $attributes = $row->getAttributes();
-            $val = $attributes[$attribute];
+            $val = $row->getAttribute($attribute);
 
             if ($min === null) {
                 $min = $val;

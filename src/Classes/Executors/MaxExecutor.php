@@ -16,8 +16,7 @@ class MaxExecutor extends BaseExecutor
 
         $max = null;
         foreach ($data as $row) {
-            $attributes = $row->getAttributes();
-            $val = $attributes[$attribute];
+            $val = $row->getAttribute($attribute);
 
             if ($max === null) {
                 $max = $val;

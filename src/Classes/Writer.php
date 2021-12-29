@@ -65,11 +65,7 @@ class Writer
      */
     public function write(array $rows): array
     {
-        $data = [];
-        foreach ($rows as $row) {
-            $data[] = $row->getAttributes();
-        }
-
+        $data = Row::toArray($rows);
         $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 
         if (!file_put_contents($this->path, $json)) {

@@ -20,8 +20,7 @@ class AvgExecutor extends BaseExecutor
 
         foreach ($data as $row) {
             $count++;
-            $attributes = $row->getAttributes();
-            $avg += $attributes[$attribute];
+            $avg += $row->getAttribute($attribute);
         }
 
         return $count === 0 ? null : $avg / $count;

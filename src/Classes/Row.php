@@ -2,6 +2,8 @@
 
 namespace Vollborn\LocalDB\Classes;
 
+use Vollborn\LocalDB\Classes\Exceptions\LocalDBException;
+
 class Row
 {
     /**
@@ -34,6 +36,19 @@ class Row
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Vollborn\LocalDB\Classes\Exceptions\LocalDBException
+     */
+    public function getAttribute(string $name)
+    {
+        if (!array_key_exists($name, $this->attributes)) {
+            throw new LocalDBException("Column not found: $name");
+        }
+        return $this->attributes[$name];
     }
 
     /**
