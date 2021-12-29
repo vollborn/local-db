@@ -1,6 +1,7 @@
 {
     "name": "vollborn/local-db",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "vollborn",
