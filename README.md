@@ -4,13 +4,17 @@ LocalDB is a small package to read and write JSON files in a Laravel Eloquent li
 <br>It was originally developed for small web servers that cannot connect to classic databases.
 
 
-
+<br>
 
 ## Installation
 
-Coming soon
+This package ist available via [composer](https://getcomposer.org/).
 
+```shell
+composer require vollborn/local-db
+```
 
+<br>
 
 
 ## Configuration
@@ -52,7 +56,7 @@ In addition, integers can have *autoincrements*.
 <br>All data types can also be *nullable*.
 
 
-
+<br>
 
 ## Usage
 
